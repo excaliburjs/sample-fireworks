@@ -7,10 +7,13 @@ export class Firework extends Actor {
     explosion2: GpuParticleEmitter;
     life: number;
     body: BodyComponent;
+    originalPos: Vector;
+    inProgress: boolean;
 
     constructor(pos: Vector, life: number, random: Random) {
         super({ name: "Firework" })
         this.random = random;
+        this.originalPos = pos.clone();
         this.pos = pos;
         this.acc = vec(0, 800);
 
@@ -87,20 +90,29 @@ export class Firework extends Actor {
     }
 
     launch() {
+        if (this.inProgress) return;
+        this.inProgress = true;
+        this.pos = this.originalPos;
+
         coroutine(this.scene!.engine, (function*(this: Firework) {
             this.vel = vec(this.random.floating(-200, 200), this.random.floating(-800, -1000));
             this.trail.isEmitting = true;
-            while (this.life > 0) {
+            let hasExploded = false;
+            let life = this.life;
+            while (life > 0) {
                 const elapsed = yield;
-                this.life -= elapsed;
-                if (this.vel.y >= 0) {
-                    break;
+                life -= elapsed;
+                if (this.vel.y >= 0 && !hasExploded) {
+                    hasExploded = true;
+                    this.trail.isEmitting = false;
+                    this.explosion.emitParticles(500);
+                    this.explosion2.emitParticles(500);
                 }
             }
-            this.trail.isEmitting = false;
-            this.explosion.emitParticles(500);
-            this.explosion2.emitParticles(500);
-
+            this.trail.clearParticles();
+            this.explosion.clearParticles();
+            this.explosion2.clearParticles();
+            this.inProgress = false;
         } as CoroutineGenerator).bind(this))
     }
 

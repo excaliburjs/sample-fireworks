@@ -12,15 +12,21 @@ export class MyLevel extends Scene {
         // Scene.onInitialize is where we recommend you perform the composition for your game
         const player = new Player();
         this.add(player); // Actors need to be added to a scene to be drawn
-        const firework = new Firework(vec(400, 600), 2000, random);
-        this.add(firework);
-        firework.launch();
 
-        this.input.pointers.on('down', () => {
-            const firework = new Firework(vec(400, 600), 2000, random);
+        const fireworks: Firework[] = [];
+        for (let i = 0; i < 20; i++) {
+            const firework = new Firework(vec(400, 600), 4000, random);
+            fireworks.push(firework);
             this.add(firework);
-            firework.launch();
-        });
+        }
+        let currentFireworkIndex = 0;
+        const launch = () => {
+            fireworks[currentFireworkIndex].launch();
+            currentFireworkIndex = (currentFireworkIndex + 1) % fireworks.length;
+        };
+
+        this.input.pointers.on('down', launch);
+        this.input.keyboard.on('press', launch);
     }
 
     override onPreLoad(loader: DefaultLoader): void {
