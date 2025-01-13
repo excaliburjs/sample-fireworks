@@ -1,8 +1,12 @@
-import { DefaultLoader, Engine, ExcaliburGraphicsContext, Random, Scene, SceneActivationContext, vec } from "excalibur";
+import { Color, DefaultLoader, Engine, ExcaliburGraphicsContext, Random, Scene, SceneActivationContext, vec } from "excalibur";
 import { Player } from "./player";
 import { Firework } from "./firework";
 
 export class MyLevel extends Scene {
+    constructor() {
+        super();
+        this.backgroundColor = Color.Black;
+    }
     override onInitialize(engine: Engine): void {
         const random = new Random(1337);
         // Scene.onInitialize is where we recommend you perform the composition for your game

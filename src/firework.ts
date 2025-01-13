@@ -1,4 +1,4 @@
-import { Actor, BodyComponent, Color, CoordPlane, coroutine, CoroutineGenerator, Entity, GpuParticleEmitter, MotionComponent, ParticleEmitter, Random, Scene, TransformComponent, vec, Vector } from "excalibur";
+import { Actor, BodyComponent, Color, coroutine, CoroutineGenerator, GpuParticleEmitter, Random, vec, Vector } from "excalibur";
 
 export class Firework extends Actor {
     random: Random;
@@ -43,8 +43,8 @@ export class Firework extends Actor {
                 minSpeed: 10,
                 maxSpeed: 200,
                 acc: vec(0, 100),
-                beginColor: Color.Red,
-                endColor: Color.Yellow
+                beginColor: this.randomColor(),
+                endColor: this.randomColor()
             }
         });
         this.explosion2 = new GpuParticleEmitter({
@@ -57,14 +57,33 @@ export class Firework extends Actor {
                 minSpeed: 10,
                 maxSpeed: 200,
                 acc: vec(0, 100),
-                beginColor: Color.White,
-                endColor: Color.Purple
+                beginColor: this.randomColor(),
+                endColor: this.randomColor()
             }
         });
 
         this.addChild(this.trail);
         this.addChild(this.explosion);
         this.addChild(this.explosion2);
+    }
+
+    private _colors = [
+
+        Color.fromHex("#ff0000"),
+        Color.fromHex("#0078ff"),
+        Color.fromHex("#ffffff"),
+        Color.fromHex("#d059c5"),
+        Color.fromHex("#dff241"),
+        Color.fromHex("#05ff1c"),
+        Color.fromHex("#ffdf00"),
+        Color.fromHex("#3e00f9"),
+        Color.fromHex("#ff5fc0"),
+        Color.fromHex("#ff3f3f"),
+        Color.fromHex("#f66706"),
+    ]
+
+    private randomColor(): Color {
+        return this.random.pickOne(this._colors);
     }
 
     launch() {
