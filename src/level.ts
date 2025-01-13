@@ -1,5 +1,4 @@
 import { Color, DefaultLoader, Engine, ExcaliburGraphicsContext, Random, Scene, SceneActivationContext, vec } from "excalibur";
-import { Player } from "./player";
 import { Firework } from "./firework";
 
 export class MyLevel extends Scene {
@@ -9,9 +8,6 @@ export class MyLevel extends Scene {
     }
     override onInitialize(engine: Engine): void {
         const random = new Random(1337);
-        // Scene.onInitialize is where we recommend you perform the composition for your game
-        const player = new Player();
-        this.add(player); // Actors need to be added to a scene to be drawn
 
         const fireworks: Firework[] = [];
         for (let i = 0; i < 20; i++) {
