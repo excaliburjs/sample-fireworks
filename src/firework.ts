@@ -8,7 +8,7 @@ export class Firework extends Actor {
     life: number;
     body: BodyComponent;
     originalPos: Vector;
-    inProgress: boolean;
+    inProgress: boolean = false;
 
     constructor(pos: Vector, life: number, random: Random) {
         super({ name: "Firework" })
