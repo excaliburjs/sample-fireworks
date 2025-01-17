@@ -1,7 +1,8 @@
-import { Color, DefaultLoader, Engine, ExcaliburGraphicsContext, Random, Scene, SceneActivationContext, vec } from "excalibur";
+import { Color, DefaultLoader, Engine, ExcaliburGraphicsContext, Random, Scene, SceneActivationContext, Timer, vec } from "excalibur";
 import { Firework } from "./firework";
 
 export class MyLevel extends Scene {
+    timer!: Timer;
     constructor() {
         super();
         this.backgroundColor = Color.Black;
@@ -23,6 +24,14 @@ export class MyLevel extends Scene {
 
         this.input.pointers.on('down', launch);
         this.input.keyboard.on('press', launch);
+
+        this.timer = new Timer({
+            fcn: launch,
+            interval: 1000,
+            repeats: true
+        });
+        this.timer.start();
+        this.add(this.timer);
     }
 
     override onPreLoad(loader: DefaultLoader): void {
